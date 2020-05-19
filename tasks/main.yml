@@ -1,0 +1,47 @@
+---
+- name: assert required variables are set and have reasonable values
+  assert:
+    that:
+    - (satis_olafnorge_de_labels | length) > 0
+    - (satis_olafnorge_de_network_definitions | length) > 0
+    - (satis_olafnorge_de_networks | length) > 0
+    - satis_olafnorge_de_environment is defined
+    - satis_olafnorge_de_environment.app_key is defined
+    - (satis_olafnorge_de_environment.app_key | length) > 0
+    - satis_olafnorge_de_environment.db_password is defined
+    - (satis_olafnorge_de_environment.db_password | length) > 0
+    - satis_olafnorge_de_environment.rollbar_enabled is defined
+    - (not (satis_olafnorge_de_environment.rollbar_enabled)) or
+      (
+        (satis_olafnorge_de_environment.rollbar_enabled) and
+        (satis_olafnorge_de_environment.rollbar_token is defined) and
+        ((satis_olafnorge_de_environment.rollbar_token | length) > 0)
+      )
+
+- name: create secrets for satis.example.com
+  docker_secret:
+    data: "{{ item.value.data }}"
+    name: "{{ item.value.name }}"
+    state: present
+  no_log: yes
+  with_dict: "{{ satis_olafnorge_de_secrets }}"
+  when: satis_olafnorge_de_use_secrets
+
+- name: write crontab skeleton
+  template:
+    dest: "{{ satis_olafnorge_de_crontab_path }}"
+    mode: 0600
+    src: crontab.j2
+  register: satis_olafnorge_de_crontab_templated
+
+- name: register dynamic name of crontab skeleton
+  set_fact:
+    satis_olafnorge_de_configs_dict: "{'satis-crontab-{{ satis_olafnorge_de_crontab_templated.checksum[:10] }}':{'file':'{{ satis_olafnorge_de_crontab_path }}'}}"
+
+- name: spawn satis.example.com service
+  docker_stack:
+    compose:
+      - "{{ satis_olafnorge_de_compose }}"
+    name: "{{ satis_olafnorge_de_name }}"
+    prune: yes
+    state: present

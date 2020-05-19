@@ -1,0 +1,345 @@
+---
+satis_olafnorge_de_compose:
+  version: "3.7"
+  services:
+    satis:
+      deploy:
+        labels: "{{ satis_olafnorge_de_labels }}"
+        placement:
+          constraints:
+            - node.role != manager
+        mode: global
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 5
+          window: 300s
+        update_config:
+          failure_action: rollback
+          monitor: 120s
+      environment:
+        - APP_NAME={{ satis_olafnorge_de_environment.app_name | default('Satis') }}
+        - APP_DEBUG={{ satis_olafnorge_de_environment.app_debug | default('false') }}
+        - APP_ENV={{ satis_olafnorge_de_environment.app_env | default('development') }}
+        - APP_FORCE_SCHEME={{ satis_olafnorge_de_environment.app_force_scheme | default('http') }}
+        - APP_HOST={{ satis_olafnorge_de_environment.app_host | default('satis.example.com') }}
+        - APP_KEY={{ satis_olafnorge_de_environment.app_key }}
+        - APP_TIMEZONE={{ satis_olafnorge_de_environment.app_timezone | default('Europe/Berlin') }}
+        - APP_URL={{ satis_olafnorge_de_environment.app_url | default('https://satis.example.com') }}
+        - AWS_BUCKET={{ satis_olafnorge_de_environment.aws_bucket | default('null') }}
+        - AWS_KEY={{ satis_olafnorge_de_environment.aws_key | default('null') }}
+        - AWS_REGION={{ satis_olafnorge_de_environment.aws_region | default('null') }}
+        - AWS_SECRET={{ satis_olafnorge_de_environment.aws_secret | default('null') }}
+        - BROADCAST_DRIVER={{ satis_olafnorge_de_environment.broadcast_driver | default('null') }}
+        - BROADCAST_REDIS_CONNECTION={{ satis_olafnorge_de_environment.broadcast_redis_connection | default('default') }}
+        - CACHE_DATABASE_CONNECTION={{ satis_olafnorge_de_environment.cache_database_connection | default('null') }}
+        - CACHE_DATABASE_TABLE={{ satis_olafnorge_de_environment.cache_database_table | default('cache') }}
+        - CACHE_DRIVER={{ satis_olafnorge_de_environment.cache_driver | default('file') }}
+        - CACHE_PREFIX={{ satis_olafnorge_de_environment.cache_prefix | default('satis') }}
+        - CACHE_REDIS_CONNECTION={{ satis_olafnorge_de_environment.cache_redis_connection | default('default') }}
+        - DB_CHARSET={{ satis_olafnorge_de_environment.db_charset | default('utf8mb4') }}
+        - DB_COLLATION={{ satis_olafnorge_de_environment.db_collation | default('utf8mb4_unicode_ci') }}
+        - DB_CONNECTION={{ satis_olafnorge_de_environment.db_connection | default('mysql') }}
+        - DB_DATABASE={{ satis_olafnorge_de_environment.db_database | default('satis') }}
+        - DB_HOST={{ satis_olafnorge_de_environment.db_host | default('database') }}
+        - DB_PASSWORD={{ satis_olafnorge_de_environment.db_password }}
+        - DB_PORT={{ satis_olafnorge_de_environment.db_port | default('3306') }}
+        - DB_PREFIX={{ satis_olafnorge_de_environment.db_prefix | default('') }}
+        - DB_SCHEMA={{ satis_olafnorge_de_environment.db_schema | default('public') }}
+        - DB_STRICT_MODE={{ satis_olafnorge_de_environment.db_strict_mode | default('false') }}
+        - DB_TIMEZONE={{ satis_olafnorge_de_environment.db_timezone | default('+00:00') }}
+        - DB_USERNAME={{ satis_olafnorge_de_environment.db_username | default('satis') }}
+        - FILESYSTEM_CLOUD={{ satis_olafnorge_de_environment.filesystem_cloud | default('s3') }}
+        - FILESYSTEM_DRIVER={{ satis_olafnorge_de_environment.filesystem_driver | default('local') }}
+        - LOCK_DRIVER={{ satis_olafnorge_de_environment.lock_driver | default('semaphore') }}
+        - LOCK_REDIS_CONNECTION={{ satis_olafnorge_de_environment.lock_redis_connection | default('default') }}
+        - LOG_LEVEL={{ satis_olafnorge_de_environment.log_level | default('debug') }}
+        - LOG_STACK_CHANNELS={{ satis_olafnorge_de_environment.log_stack_channels | default('[]') | join(',') }}
+        - LOG_CHANNEL={{ satis_olafnorge_de_environment.log_channel | default('stack') }}
+        - MAIL_DRIVER={{ satis_olafnorge_de_environment.mail_driver | default('smtp') }}
+        - MAIL_ENCRYPTION={{ satis_olafnorge_de_environment.mail_encryption | default('false') }}
+        - MAIL_FROM_ADDRESS={{ satis_olafnorge_de_environment.mail_from_address | default('noreply@satis.example.com') }}
+        - MAIL_FROM_NAME={{ satis_olafnorge_de_environment.mail_from_name | default('Satis') }}
+        - MAIL_HOST={{ satis_olafnorge_de_environment.mail_host | default('localhost') }}
+        - MAIL_PASSWORD={{ satis_olafnorge_de_environment.mail_password | default('null') }}
+        - MAIL_PORT={{ satis_olafnorge_de_environment.mail_port | default('1025') }}
+        - MAIL_USERNAME={{ satis_olafnorge_de_environment.mail_username | default('null') }}
+        - MAILGUN_DOMAIN={{ satis_olafnorge_de_environment.mailgun_domain | default('null') }}
+        - MAILGUN_SECRET={{ satis_olafnorge_de_environment.mailgun_secret | default('null') }}
+        - MEMCACHED_HOST={{ satis_olafnorge_de_environment.memcached_host | default('127.0.0.1') }}
+        - MEMCACHED_PASSWORD={{ satis_olafnorge_de_environment.memcached_password | default('null') }}
+        - MEMCACHED_PERSISTENT_ID={{ satis_olafnorge_de_environment.memcached_persistent_id | default('null') }}
+        - MEMCACHED_PORT={{ satis_olafnorge_de_environment.memcached_port | default('11211') }}
+        - MEMCACHED_USERNAME={{ satis_olafnorge_de_environment.memcached_username | default('null') }}
+        - OAUTH_CLIENT_ID={{ satis_olafnorge_de_environment.oauth_client_id | default('null') }}
+        - OAUTH_CLIENT_SECRET={{ satis_olafnorge_de_environment.oauth_client_secret | default('null') }}
+        - OAUTH_REDIRECT={{ satis_olafnorge_de_environment.oauth_redirect | default('https://satis.example.com') }}
+        - PUSHER_APP_ID={{ satis_olafnorge_de_environment.pusher_app_id | default('null') }}
+        - PUSHER_KEY={{ satis_olafnorge_de_environment.pusher_key | default('null') }}
+        - PUSHER_SECRET={{ satis_olafnorge_de_environment.pusher_secret | default('null') }}
+        - QUEUE_CONNECTION={{ satis_olafnorge_de_environment.queue_driver | default('sync') }}
+        - QUEUE_FAILED_TABLE={{ satis_olafnorge_de_environment.queue_failed_table | default('failed_jobs') }}
+        - QUEUE_REDIS_CONNECTION={{ satis_olafnorge_de_environment.queue_redis_connection | default('default') }}
+        - REDIS_CLIENT={{ satis_olafnorge_de_environment.redis_client | default('predis') }}
+        - REDIS_CLUSTER={{ satis_olafnorge_de_environment.redis_cluster | default('false') }}
+        - REDIS_DATABASE={{ satis_olafnorge_de_environment.redis_database | default('0') }}
+        - REDIS_HOST={{ satis_olafnorge_de_environment.redis_host | default('redis') }}
+        - REDIS_PASSWORD={{ satis_olafnorge_de_environment.redis_password | default('null') }}
+        - REDIS_PORT={{ satis_olafnorge_de_environment.redis_port | default('6379') }}
+        - ROLLBAR_BRANCH={{ satis_olafnorge_de_environment.rollbar_branch | default('master') }}
+        - ROLLBAR_CODE_VERSION={{ satis_olafnorge_de_environment.rollbar_code_version | default('master') }}
+        - ROLLBAR_ENABLED={{ satis_olafnorge_de_environment.rollbar_enabled | default('false') }}
+        - ROLLBAR_TOKEN={{ satis_olafnorge_de_environment.rollbar_token | default('' | hash('md5')) }}
+        - SATIS_AUTH_JSON={{ satis_olafnorge_de_environment.satis_auth_json | default('') }}
+        - SATIS_BITBUCKET_OAUTH={{ satis_olafnorge_de_environment.satis_bitbucket_oauth | default('{}') }}
+        - SATIS_GITHUB_DOMAINS={{ satis_olafnorge_de_environment.satis_github_domains | default('[]') }}
+        - SATIS_GITLAB_DOMAINS={{ satis_olafnorge_de_environment.satis_gitlab_domains | default('[]') }}
+        - SATIS_GITLAB_OAUTH={{ satis_olafnorge_de_environment.satis_gitlab_oauth | default('{}') }}
+        - SATIS_GITLAB_TOKEN={{ satis_olafnorge_de_environment.satis_gitlab_token | default('{}') }}
+        - SATIS_HTPASSWD_PASSWORD={{ satis_olafnorge_de_environment.satis_htpasswd_password | default(10000 | random | hash('md5')) }}
+        - SATIS_HTTP_BASIC={{ satis_olafnorge_de_environment.satis_http_basic | default('{}') }}
+        - SES_KEY={{ satis_olafnorge_de_environment.ses_key | default('null') }}
+        - SES_SECRET={{ satis_olafnorge_de_environment.ses_secret | default('null') }}
+        - SESSION_DOMAIN={{ satis_olafnorge_de_environment.session_domain | default('satis.example.com') }}
+        - SESSION_DRIVER={{ satis_olafnorge_de_environment.session_driver | default('file') }}
+        - SESSION_SECURE_COOKIE={{ satis_olafnorge_de_environment.session_secure_cookie | default('false') }}
+        - SPARKPOST_SECRET={{ satis_olafnorge_de_environment.sparkpost_secret | default('null') }}
+        - SQS_SECRET_KEY={{ satis_olafnorge_de_environment.sqs_secret_key | default('') }}
+        - STRIPE_KEY={{ satis_olafnorge_de_environment.stripe_key | default('null') }}
+        - STRIPE_SECRET={{ satis_olafnorge_de_environment.stripe_secret | default('null') }}
+      image: "olafnorge/satis:{{ satis_olafnorge_de_version }}"
+      networks: "{{ satis_olafnorge_de_networks }}"
+      volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
+    database:
+      deploy:
+        placement:
+          constraints:
+            - node.role != manager
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 5
+          window: 300s
+        update_config:
+          failure_action: rollback
+          monitor: 120s
+      environment:
+        - MYSQL_DATABASE={{ satis_olafnorge_de_environment.db_database | default('satis') }}
+        - MYSQL_USER={{ satis_olafnorge_de_environment.db_username | default('satis') }}
+        - MYSQL_PASSWORD{{ '_FILE' if satis_olafnorge_de_use_secrets else '' }}={{ '/run/secrets/' if satis_olafnorge_de_use_secrets else '' }}{{ satis_olafnorge_de_environment.db_password | default('') }}
+        - MYSQL_ROOT_PASSWORD{{ '_FILE' if satis_olafnorge_de_use_secrets else '' }}={{ '/run/secrets/' if satis_olafnorge_de_use_secrets else '' }}{{ satis_olafnorge_de_environment.db_root_password | default('') }}
+      image: mysql:5.7
+      networks:
+        - "{{ satis_olafnorge_de_network_internal }}"
+      volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
+    redis:
+      deploy:
+        placement:
+          constraints:
+            - node.role != manager
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 5
+          window: 300s
+        update_config:
+          failure_action: rollback
+          monitor: 120s
+      image: redis:4-alpine
+      networks:
+        - "{{ satis_olafnorge_de_network_internal }}"
+      volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
+    xtrabackup:
+      command: cron -f -l -L15
+      configs:
+        - source: "satis-crontab-{{ satis_olafnorge_de_crontab_templated.checksum[:10] }}"
+          target: /etc/cron.d/crontab
+          uid: '0'
+          gid: '0'
+          mode: 0644
+      deploy:
+        placement:
+          constraints:
+            - node.role != manager
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 5
+          window: 300s
+        update_config:
+          failure_action: rollback
+          monitor: 120s
+      image: olafnorge/xtrabackup:2.4
+      networks:
+        - "{{ satis_olafnorge_de_network_internal }}"
+      volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
+  networks: "{{ satis_olafnorge_de_network_definitions }}"
+  configs: "{{ satis_olafnorge_de_configs_dict }}"
+
+satis_olafnorge_de_crontab_path: "/root/{{ satis_olafnorge_de_name }}-crontab"
+satis_olafnorge_de_labels: []
+satis_olafnorge_de_crons:
+  - interval: '* * * * *'
+    user: root
+    command: echo 'every minute'
+satis_olafnorge_de_name: satisolafnorgede
+satis_olafnorge_de_network_definitions: []
+satis_olafnorge_de_network_internal: internal
+satis_olafnorge_de_networks:
+  - "{{ satis_olafnorge_de_network_internal }}"
+satis_olafnorge_de_use_secrets: yes
+satis_olafnorge_de_version: latest
+
+satis_olafnorge_de_environment:
+  app_name: Satis
+  app_debug: "false"
+  app_env: production
+  app_force_scheme: https
+  app_host: satis.example.com
+  app_key: "{{ satis_olafnorge_de_secrets.app_key.name if satis_olafnorge_de_use_secrets else satis_olafnorge_de_app_key }}"
+  app_timezone: Europe/Berlin
+  app_url: https://satis.example.com
+  aws_bucket: "null"
+  aws_key: "null"
+  aws_region: "null"
+  aws_secret: "null"
+  broadcast_driver: "null"
+  broadcast_redis_connection: default
+  cache_database_connection: "null"
+  cache_database_table: cache
+  cache_driver: redis
+  cache_prefix: satis
+  cache_redis_connection: default
+  db_charset: utf8mb4
+  db_collation: utf8mb4_unicode_ci
+  db_connection: mysql
+  db_database: satis
+  db_host: database
+  db_password: "{{ satis_olafnorge_de_secrets.db_password.name if satis_olafnorge_de_use_secrets else satis_olafnorge_de_db_password }}"
+  db_port: 3306
+  db_prefix: ""
+  db_root_password: "{{ satis_olafnorge_de_secrets.db_root_password.name if satis_olafnorge_de_use_secrets else satis_olafnorge_de_db_root_password }}"
+  db_schema: public
+  db_strict_mode: "false"
+  db_timezone: "+00:00"
+  db_username: satis
+  filesystem_cloud: s3
+  filesystem_driver: local
+  lock_driver: redis
+  lock_redis_connection: default
+  log_channel: stack
+  log_level: error
+  log_stack_channels:
+    - errorlog
+    - rollbar
+  mail_driver: smtp
+  mail_encryption: tls
+  mail_from_address: satis@example.com
+  mail_from_name: Satis
+  mail_host: webmail.example.com
+  mail_password: "{{ satis_olafnorge_de_secrets.mail_password.name if satis_olafnorge_de_use_secrets else satis_olafnorge_de_mail_password }}"
+  mail_port: 587
+  mail_username: satis@example.com
+  mailgun_domain: "null"
+  mailgun_secret: "null"
+  memcached_host: 127.0.0.1
+  memcached_password: "null"
+  memcached_persistent_id: "null"
+  memcached_port: 11211
+  memcached_username: "null"
+  oauth_client_id:
+  oauth_client_secret: "{{ satis_olafnorge_de_secrets.oauth_client_secret.name if satis_olafnorge_de_use_secrets else satis_olafnorge_de_oauth_client_secret }}"
+  oauth_redirect: https://satis.example.com/auth/callback
+  pusher_app_id: "null"
+  pusher_key: "null"
+  pusher_secret: "null"
+  queue_connection: redis
+  queue_failed_table: failed_jobs
+  queue_redis_connection: default
+  redis_client: phpredis
+  redis_cluster: "false"
+  redis_database: 0
+  redis_host: "redis"
+  redis_password: "null"
+  redis_port: 6379
+  rollbar_branch: "{{ satis_olafnorge_de_version }}"
+  rollbar_code_version: "{{ satis_olafnorge_de_version }}"
+  rollbar_enabled: "true"
+  rollbar_token: "{{ satis_olafnorge_de_secrets.rollbar_token.name if satis_olafnorge_de_use_secrets else satis_olafnorge_de_rollbar_token }}"
+  satis_auth_json: "{{ satis_olafnorge_de_secrets.auth_json.name if satis_olafnorge_de_use_secrets else satis_olafnorge_de_auth_json }}"
+  satis_bitbucket_oauth: "{}"
+  satis_github_domains: "[]"
+  satis_github_oauth: "{}"
+  satis_gitlab_domains: '["gitlab.example.com"]'
+  satis_gitlab_oauth: "{}"
+  satis_gitlab_token: "{}"
+  satis_htpasswd_password: "{{ satis_olafnorge_de_secrets.htpasswd_password.name if satis_olafnorge_de_use_secrets else satis_olafnorge_de_htpasswd_password }}"
+  satis_http_basic: "{}"
+  ses_key: "null"
+  ses_secret: "null"
+  session_domain: satis.example.com
+  session_driver: redis
+  session_secure_cookie: "true"
+  sparkpost_secret: "null"
+  sqs_secret_key: ""
+  stripe_key: "null"
+  stripe_secret: "null"
+
+satis_olafnorge_de_secrets:
+  app_key:
+    data: "{{ satis_olafnorge_de_app_key }}"
+    name: satis_olafnorge_de_app_key
+  auth_json:
+    data: "{{ satis_olafnorge_de_auth_json }}"
+    name: satis_olafnorge_de_auth_json
+  db_password:
+    data: "{{ satis_olafnorge_de_db_password }}"
+    name: satis_olafnorge_de_db_password
+  db_root_password:
+    data: "{{ satis_olafnorge_de_db_root_password }}"
+    name: satis_olafnorge_de_db_root_password
+  github_oauth:
+    data: "{{ satis_olafnorge_de_github_oauth }}"
+    name: satis_olafnorge_de_github_oauth
+  gitlab_token:
+    data: "{{ satis_olafnorge_de_gitlab_token }}"
+    name: satis_olafnorge_de_gitlab_token
+  htpasswd_password:
+    data: "{{ satis_olafnorge_de_htpasswd_password }}"
+    name: satis_olafnorge_de_htpasswd_password
+  http_basic:
+    data: "{{ satis_olafnorge_de_http_basic }}"
+    name: satis_olafnorge_de_http_basic
+  mail_password:
+    data: "{{ satis_olafnorge_de_mail_password }}"
+    name: satis_olafnorge_de_mail_password
+  oauth_client_secret:
+    data: "{{ satis_olafnorge_de_oauth_client_secret }}"
+    name: satis_olafnorge_de_oauth_client_secret
+  rollbar_token:
+    data: "{{ satis_olafnorge_de_rollbar_token }}"
+    name: satis_olafnorge_de_rollbar_token
+
+# vaults, you may define them in a separate file which overrides these defaults
+satis_olafnorge_de_app_key: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_auth_json: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_db_password: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_db_root_password: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_github_oauth: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_gitlab_token: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_htpasswd_password: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_http_basic: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_mail_password: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_oauth_client_secret: # FIXME: add your vault here using 'ansible-vault'
+satis_olafnorge_de_rollbar_token: # FIXME: add your vault here using 'ansible-vault'
